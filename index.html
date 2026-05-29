@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaAI // Next-Gen AI Content Engine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ==========================================================================
+           1. CSS VARIABLES & THEMES (2026 Premium SaaS System)
+           ========================================================================== */
+        :root[data-theme="dark"] {
+            --bg-primary: #0b0f19;
+            --bg-secondary: #0f172a;
+            --bg-card: rgba(17, 24, 39, 0.7);
+            --bg-card-solid: #111827;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(124, 58, 237, 0.2);
+            --text-primary: #f9fafb;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --accent: #7c3aed;
+            --accent-gradient: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
+            --secondary-accent: #06b6d4;
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-blur: blur(12px);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.5);
+            --shadow-lg: 0 20px 40px rgba(0,0,0,0.7);
+            --glow-color: rgba(124, 58, 237, 0.6);
+        }
+
+        :root[data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-card: rgba(243, 244, 246, 0.8);
+            --bg-card-solid: #f3f4f6;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --border-glow: rgba(124, 58, 237, 0.1);
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --text-muted: #9ca3af;
+            --accent: #7c3aed;
+            --accent-gradient: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
+            --secondary-accent: #06b6d4;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-blur: blur(12px);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-lg: 0 20px 40px rgba(0,0,0,0.05);
+            --glow-color: rgba(124, 58, 237, 0.2);
+        }
+
+        /* Base Resets */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* ==========================================================================
+           2. GLOBAL REUSABLE UI COMPONENTS (Utility Framework)
+           ========================================================================== */
+        .glow-cursor {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--glow-color) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            mix-blend-mode: screen;
+            opacity: 0.15;
+        }
+
+        .scroll-progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--accent-gradient);
+            width: 0%;
+            z-index: 1000;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Glassmorphism utility card */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 16px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .glass-card:hover {
+            border-color: var(--border-glow);
+            box-shadow: 0 8px 30px rgba(124, 58, 237, 0.05);
+            transform: translateY(-2px);
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s;
+        }
+
+        /* Premium Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+            position: relative;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--text-secondary);
+        }
+
+        .gradient-text {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .toast {
+            background: var(--bg-card-solid);
+            color: var(--text-primary);
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Intersection Observer Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* SPA Page Management Layouts */
+        .app-page {
+            display: none;
+            padding-top: 80px; /* Offset for sticky header */
+        }
+
+        .app-page.active-page {
+            display: block;
+        }
+
+        /* ==========================================================================
+           3. SITE HEADER & NAVIGATION (Sticky Floating Style)
+           ========================================================================== */
+        header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            height: 70px;
+            z-index: 999;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--text-primary);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 0; width: 0; height: 2px;
+            background: var(--accent-gradient);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 2px;
+            background-color: var(--text-primary);
+            transition: 0.3s;
+        }
+
+        /* ==========================================================================
+           4. HOME PAGE SECTIONS (Hero, Bento, Features, Demozone)
+           ========================================================================== */
+        /* Hero Section */
+        .hero {
+            padding: 6rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -10%; left: 50%; transform: translateX(-50%);
+            width: 60vw; height: 40vw;
+            background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(124, 58, 237, 0.1);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 99px;
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2.5rem auto;
+        }
+
+        .hero-ctas {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 4rem;
+        }
+
+        /* Interactive Dynamic Mockup Frame */
+        .mockup-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .mockup-frame {
+            border-radius: 12px;
+            background: #000;
+            border: 4px solid #1e293b;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            aspect-ratio: 16/9;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mockup-header {
+            background: #1e293b;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mockup-dot {
+            width: 10px; height: 10px; border-radius: 50%; background: #ef4444;
+        }
+        .mockup-dot:nth-child(2) { background: #eab308; }
+        .mockup-dot:nth-child(3) { background: #22c55e; }
+
+        .mockup-body {
+            flex: 1;
+            background: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            padding: 1.5rem;
+            text-align: left;
+            gap: 1.5rem;
+        }
+
+        /* Trusted By Section */
+        .trusted-by {
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 6rem;
+        }
+
+        .trusted-by p {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .logo-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+            opacity: 0.6;
+        }
+
+        .logo-grid i { font-size: 2rem; }
+
+        /* Bento Grid Showcase Layout */
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-desc {
+            text-align: center;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 3.5rem auto;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 6rem;
+        }
+
+        .bento-item {
+            min-height: 240px;
+        }
+
+        .bento-item.wide { grid-column: span 2; }
+        .bento-item.tall { grid-row: span 2; }
+
+        /* Demo Interactive Sandbox Engine */
+        .demo-section {
+            padding: 6rem 0;
+            background: linear-gradient(180deg, transparent, var(--bg-secondary), transparent);
+        }
+
+        .demo-box {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .demo-input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .demo-input {
+            flex: 1;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .demo-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(124,58,237,0.2);
+        }
+
+        .demo-output {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            min-height: 120px;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            width: 36px; height: 36px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* FAQ Accordion system styles */
+        .faq-wrapper {
+            max-width: 800px;
+            margin: 0 auto 6rem auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .faq-item {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-card);
+            overflow: hidden;
+        }
+
+        .faq-trigger {
+            width: 100%;
+            padding: 1.5rem;
+            text-align: left;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-content {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0, 1, 0, 1), padding 0.3s ease;
+            color: var(--text-secondary);
+        }
+
+        .faq-item.open .faq-content {
+            max-height: 1000px;
+            padding-bottom: 1.5rem;
+            transition: max-height 0.3s cubic-bezier(1, 0, 1, 0), padding 0.3s ease;
+        }
+
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+        .faq-item.open .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Newsletter Component Style */
+        .newsletter-box {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 6rem auto;
+            padding: 3.5rem;
+        }
+
+        /* ==========================================================================
+           5. DASHBOARD LAYOUT & ENGINE DESIGNS (Elite SaaS Working Canvas)
+           ========================================================================== */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: calc(100vh - 70px);
+        }
+
+        .dash-sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .dash-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .dash-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .dash-menu-item:hover, .dash-menu-item.active {
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--text-primary);
+        }
+
+        .dash-menu-item i {
+            width: 20px;
+            font-size: 1.1rem;
+        }
+
+        .dash-content-area {
+            padding: 2rem;
+            overflow-y: auto;
+            background: var(--bg-primary);
+        }
+
+        .dash-header-inline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .stats-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            padding: 1.5rem;
+        }
+
+        .stat-num {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-top: 0.5rem;
+        }
+
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .prompt-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .prompt-textarea {
+            width: 100%;
+            height: 180px;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            color: var(--text-primary);
+            font-family: inherit;
+            resize: none;
+        }
+
+        .prompt-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .select-tool {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-family: inherit;
+        }
+
+        /* Real Typing Effect Loader Overlay Styles */
+        .typing-loader {
+            display: none;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+        }
+
+        .typing-dot {
+            width: 6px; height: 6px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
+
+        /* Skeleton Loading Cards CSS */
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-card-solid) 25%, var(--border-color) 50%, var(--bg-card-solid) 75%);
+            background-size: 200% 100%;
+            animation: loading-skeleton 1.5s infinite;
+            border-radius: 4px;
+        }
+        @keyframes loading-skeleton {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ==========================================================================
+           6. SUB-PAGES DESIGN (Pricing, Templates, History, Blog, Forms)
+           ========================================================================== */
+        /* Pricing Table Grids */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .pricing-card.popular {
+            border-color: var(--accent);
+            transform: scale(1.03);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            text-align: left;
+        }
+
+        .pricing-features i { color: #22c55e; }
+
+        /* Template Grid Hub */
+        .templates-filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.25rem;
+            border-radius: 99px;
+            background: var(--bg-card-solid);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .filter-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Authentication Forms Layouts */
+        .auth-container {
+            max-width: 450px;
+            margin: 4rem auto;
+            padding: 3rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: inherit;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        /* History Log Table Visual Layout */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            margin-top: 1.5rem;
+        }
+
+        .history-table th, .history-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .history-table th { color: var(--text-muted); font-weight: 600; }
+
+        /* Blog Grid Styles */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .blog-date {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Floating Widgets Support */
+        .floating-chat-widget {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 998;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 45px; height: 45px;
+            background: var(--bg-card-solid);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            z-index: 997;
+            opacity: 0; transform: translateY(10px);
+            transition: all 0.3s;
+        }
+
+        .back-to-top.visible {
+            opacity: 1; transform: translateY(0);
+        }
+
+        /* Footer Aesthetics styling definitions */
+        footer {
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            padding: 4rem 0 2rem 0;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-col h4 {
+            color: var(--text-primary);
+            margin-bottom: 1.25rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* ==========================================================================
+           7. COMPREHENSIVE RESPONSIVE BREAKPOINTS (CSS Media Queries)
+           ========================================================================== */
+        @media (max-width: 1024px) {
+            .bento-grid, .pricing-grid, .blog-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .bento-item.wide { grid-column: span 1; }
+            .hero h1 { font-size: 3rem; }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 70px; left: -100%; width: 100%; height: calc(100vh - 70px);
+                background: var(--bg-secondary);
+                flex-direction: column;
+                padding: 3rem;
+                gap: 2rem;
+                transition: 0.4s cubic-bezier(0.1, 0.8, 0.1, 1);
+            }
+            .nav-menu.active { left: 0; }
+            .hamburger { display: flex; }
+            .bento-grid, .pricing-grid, .blog-grid, .workspace-grid, .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            .stats-strip { grid-template-columns: 1fr; }
+            .logo-grid { gap: 2rem; }
+            .hero h1 { font-size: 2.5rem; }
+            .footer-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scroll-progress-bar" id="scrollBar"></div>
+    <div class="glow-cursor" id="glowCursor"></div>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <button class="back-to-top" id="backToTopBtn" aria-label="Back to Top"><i class="fa-solid fa-arrow-up"></i></button>
+    <div class="floating-chat-widget">
+        <button class="btn btn-primary" style="border-radius: 50%; width: 50px; height: 50px; padding:0;" onclick="toggleMiniChat()"><i class="fa-solid fa-comment-dots"></i></button>
+    </div>
+
+    <header>
+        <div class="container nav-wrapper">
+            <div class="logo"><i class="fa-solid fa-wand-magic-sparkles"></i> NovaAI</div>
+            <nav>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a class="nav-link active" onclick="navigateToPage('home')">Home</a></li>
+                    <li><a class="nav-link" onclick="navigateToPage('features')">Features</a></li>
+                    <li><a class="nav-link" onclick="navigateToPage('templates')">Templates</a></li>
+                    <li><a class="nav-link" onclick="navigateToPage('pricing')">Pricing</a></li>
+                    <li><a class="nav-link" onclick="navigateToPage('blog')">Blog</a></li>
+                    <li><a class="nav-link" onclick="navigateToPage('contact')">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle Theme"><i class="fa-solid fa-moon"></i></button>
+                <button class="btn btn-secondary" onclick="navigateToPage('login')" id="loginNavBtn">Login</button>
+                <button class="btn btn-primary" onclick="navigateToPage('dashboard')" id="dashNavBtn">Dashboard</button>
+                <button class="hamburger" id="hamburgerBtn" aria-label="Open Navigation Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="home-page" class="app-page active-page">
+        <section class="hero container">
+            <div class="badge"><i class="fa-solid fa-bolt"></i> The 2026 AI Content Workspace Engine</div>
+            <h1>Generate Viral Content Across Every Channel In <span class="gradient-text">Seconds</span></h1>
+            <p>NovaAI orchestrates your copywriting, social hooks, script logic, and strategic planning across a hyper-optimized design workspace.</p>
+            <div class="hero-ctas">
+                <button class="btn btn-primary" onclick="navigateToPage('signup')">Get Started Free <i class="fa-solid fa-arrow-right"></i></button>
+                <button class="btn btn-secondary" onclick="document.getElementById('demo-sandbox').scrollIntoView();">Try Live Sandbox</button>
+            </div>
+            
+            <div class="mockup-wrapper reveal">
+                <div class="mockup-frame">
+                    <div class="mockup-header">
+                        <span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span>
+                    </div>
+                    <div class="mockup-body">
+                        <div style="width: 30%; border-right: 1px solid rgba(255,255,255,0.1); padding-right: 1rem;">
+                            <div class="skeleton" style="height: 20px; width: 80%; margin-bottom: 1rem;"></div>
+                            <div class="skeleton" style="height: 12px; width: 60%; margin-bottom: 0.5rem;"></div>
+                            <div class="skeleton" style="height: 12px; width: 70%; margin-bottom: 0.5rem;"></div>
+                            <div class="skeleton" style="height: 12px; width: 50%; margin-bottom: 0.5rem;"></div>
+                        </div>
+                        <div style="flex: 1;">
+                            <h4 style="margin-bottom: 1rem;" class="gradient-text">// Automated Script Configuration Pipeline Activated</h4>
+                            <p style="color: #94a3b8; font-size: 0.9rem;" id="hero-typing-target"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="trusted-by">
+            <div class="container">
+                <p>Empowering Creators At Industry Giants Worldwide</p>
+                <div class="logo-grid">
+                    <i class="fa-brands fa-twitch"></i>
+                    <i class="fa-brands fa-youtube"></i>
+                    <i class="fa-brands fa-spotify"></i>
+                    <i class="fa-brands fa-tiktok"></i>
+                    <i class="fa-brands fa-vimeo"></i>
+                </div>
+            </div>
+        </section>
+
+        <section class="container reveal" style="padding: 4rem 0;">
+            <h2 class="section-title">Architected for Speed. Built for Impact.</h2>
+            <p class="section-desc">Experience a comprehensive layout that organizes advanced multimodal creation engines inside simple UX containers.</p>
+            
+            <div class="bento-grid">
+                <div class="glass-card bento-item tall">
+                    <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-hashtag" style="color: #a855f7;"></i> Virality Scoring Engine</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">Every output includes structural metric forecasting models that score organic retention probabilities based on historic 2026 algorithm analytics parameters.</p>
+                </div>
+                <div class="glass-card bento-item wide">
+                    <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-clapperboard" style="color: #06b6d4;"></i> Multimodal Platform Adapters</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">Convert single source ideas into optimized assets for YouTube Scripts, TikTok Hooks, and SEO blogs inside uniform structured columns instantly.</p>
+                </div>
+                <div class="glass-card bento-item">
+                    <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-language" style="color: #10b981;"></i> 45+ Dialects</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">Localization pipelines adapt idioms naturally.</p>
+                </div>
+                <div class="glass-card bento-item">
+                    <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-layer-group" style="color: #3b82f6;"></i> Context Rules</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">Train unique models on brand guidelines.</p>
+                </div>
+                <div class="glass-card bento-item wide">
+                    <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-chart-line" style="color: #f59e0b;"></i> Realtime Analytics Pipeline Integration</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">Watch production value multiply as our predictive models automatically ingest modern semantic keywords into drafts.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section" id="demo-sandbox">
+            <div class="container demo-box text-center">
+                <h2 class="section-title">Test the Production Engine</h2>
+                <p class="section-desc">Select a channel configuration profile below, write down an core concept overview, and evaluate the prompt speed processing execution layout natively.</p>
+                
+                <div class="glass-card">
+                    <div class="demo-input-group">
+                        <select id="sandboxToolSelect" class="select-tool" style="width: 200px;">
+                            <option value="Viral TikTok Hook">Viral Reel Hook</option>
+                            <option value="YouTube Title Pack">YouTube Title Pack</option>
+                            <option value="SEO Metadata Bundle">SEO Title & Meta</option>
+                        </select>
+                        <input type="text" id="sandboxInput" class="demo-input" placeholder="Type a concept outline (e.g., 'SaaS metrics explained to software developers in 30 seconds')...">
+                        <button class="btn btn-primary" onclick="executeSandboxGeneration()">Generate</button>
+                    </div>
+                    
+                    <div class="demo-output">
+                        <button class="copy-btn" onclick="copyTextTrack('sandboxOutputText')" aria-label="Copy Output"><i class="fa-regular fa-copy"></i></button>
+                        <div class="typing-loader" id="sandboxLoader">
+                            <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+                            <span>Nova AI Engine Thinking...</span>
+                        </div>
+                        <p id="sandboxOutputText" style="text-align: left; color: var(--text-secondary); font-size: 0.95rem;">Output matrix data results appear here...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container reveal">
+            <h2 class="section-title">Frequently Asked Inquiries</h2>
+            <p class="section-desc">Got architectural questions about NovaAI system processes? We have structural answers compiled here.</p>
+            
+            <div class="faq-wrapper">
+                <div class="faq-item">
+                    <button class="faq-trigger">What models empower NovaAI platform processing engines? <i class="fa-solid fa-chevron-down faq-icon"></i></button>
+                    <div class="faq-content">
+                        <p>We leverage customized orchestration pipelines built over state-of-the-art transformer architecture structures, fine-tuned across verified high-conversion marketing datasets.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-trigger">Can I export my dynamic workflows safely into team systems? <i class="fa-solid fa-chevron-down faq-icon"></i></button>
+                    <div class="faq-content">
+                        <p>Absolutely. The dashboard provides JSON structures, direct markdown generation engines, and CSV data extraction structures natively.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-trigger">Is data security compliant with corporate operations? <i class="fa-solid fa-chevron-down faq-icon"></i></button>
+                    <div class="faq-content">
+                        <p>NovaAI enforces rigorous zero-data retention policies for training endpoints, keeping corporate concepts sandboxed safely within secure environments.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container reveal">
+            <div class="glass-card newsletter-box">
+                <h2 style="margin-bottom: 1rem;">Join the Next Era of Content Creation</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">Get curated operational templates and direct deep dives into upcoming AI algorithms structural updates delivered bi-weekly.</p>
+                <div class="demo-input-group" style="max-width: 500px; margin: 0 auto;">
+                    <input type="email" class="demo-input" placeholder="Enter workspace email address...">
+                    <button class="btn btn-primary" onclick="showToast('Newsletter registration successful!')">Subscribe</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="features-page" class="app-page container">
+        <h1 class="section-title" style="margin-top: 3rem;">Core Deep Suite Operations</h1>
+        <p class="section-desc">Explore the detailed engineering tooling blocks processing your daily conceptual asset distribution.</p>
+        
+        <div class="bento-grid">
+            <div class="glass-card">
+                <i class="fa-solid fa-wand-magic-sparkles" style="font-size: 2rem; color: var(--accent); margin-bottom: 1rem;"></i>
+                <h3>AI Caption Studio</h3>
+                <p style="color: var(--text-secondary); margin-top: 0.5rem;">Generates high-retention text customized with targeted tonal tags ready for publishing platforms.</p>
+            </div>
+            <div class="glass-card">
+                <i class="fa-solid fa-bolt" style="font-size: 2rem; color: #06b6d4; margin-bottom: 1rem;"></i>
+                <h3>Viral Reel Hooks</h3>
+                <p style="color: var(--text-secondary); margin-top: 0.5rem;">Calculates psychological frame loops for the crucial initial 3 seconds of vertical video sequences.</p>
+            </div>
+            <div class="glass-card">
+                <i class="fa-solid fa-paragraph" style="font-size: 2rem; color: #10b981; margin-bottom: 1rem;"></i>
+                <h3>Full Script Engine</h3>
+                <p style="color: var(--text-secondary); margin-top: 0.5rem;">Creates structural storyboards broken into narration segments, visual direction parameters, and audio effect tags.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="templates-page" class="app-page container">
+        <h1 class="section-title" style="margin-top: 3rem;">Preconfigured Workflow Frameworks</h1>
+        <p class="section-desc">Instantly configure production models using industry-tested creative starting points.</p>
+        
+        <div class="templates-filter-bar">
+            <button class="filter-btn active">All Templates</button>
+            <button class="filter-btn">Social Media</button>
+            <button class="filter-btn">Video Production</button>
+            <button class="filter-btn">SEO Copywriting</button>
+        </div>
+
+        <div class="templates-grid">
+            <div class="glass-card" onclick="loadTemplateToDashboard('Viral TikTok Hook', 'A comprehensive hook layout highlighting unexpected core data points.')">
+                <h4><i class="fa-brands fa-tiktok"></i> Viral Shorts Hook</h4>
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem;">Optimized loop logic for dynamic attention locks.</p>
+            </div>
+            <div class="glass-card" onclick="loadTemplateToDashboard('YouTube Title Pack', 'Engaging Title iterations optimized to trigger curiosity gap behaviors.')">
+                <h4><i class="fa-brands fa-youtube"></i> YouTube Click-Gap Pack</h4>
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem;">Triggers curious click impulses safely within structural CTR metrics.</p>
+            </div>
+            <div class="glass-card" onclick="loadTemplateToDashboard('SEO Metadata Bundle', 'Rich search engine indexing snippets embedded in semantic structures.')">
+                <h4><i class="fa-solid fa-magnifying-glass"></i> semantic Search Engine Suite</h4>
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem;">Optimized meta bundles engineered for automated crawler networks.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="pricing-page" class="app-page container text-center">
+        <h1 class="section-title" style="margin-top: 3rem;">Flexible Subscription Engineering Plans</h1>
+        <p class="section-desc">Choose the operating model tier aligned with your production pipeline requirements.</p>
+        
+        <div class="pricing-grid">
+            <div class="glass-card">
+                <h3>Starter Engine</h3>
+                <div class="stat-num">$0</div>
+                <p style="color: var(--text-muted);">Free Workspace Access Forever</p>
+                <ul class="pricing-features">
+                    <li><i class="fa-solid fa-circle-check"></i> 5,000 Generation Units / mo</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Standard Tonal Adapters</li>
+                    <li><i class="fa-solid fa-circle-xmark" style="color: var(--text-muted);"></i> Dedicated Model Fine-Tuning</li>
+                </ul>
+                <button class="btn btn-secondary" style="width:100%;" onclick="navigateToPage('signup')">Initialize Model</button>
+            </div>
+            <div class="glass-card popular">
+                <div class="badge" style="margin-bottom:0.5rem;">Most Configured</div>
+                <h3>Pro Operator</h3>
+                <div class="stat-num">$29 <span style="font-size:1rem; color:var(--text-muted);">/ mo</span></div>
+                <p style="color: var(--text-muted);">For Growing Creative Operations</p>
+                <ul class="pricing-features">
+                    <li><i class="fa-solid fa-circle-check"></i> Unlimited Generation Footprints</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Deep Tonal Analytics Panel</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Priority Processing Queues</li>
+                </ul>
+                <button class="btn btn-primary" style="width:100%;" onclick="navigateToPage('signup')">Initialize Workspace Upgrade</button>
+            </div>
+            <div class="glass-card">
+                <h3>Enterprise Mesh</h3>
+                <div class="stat-num">$149 <span style="font-size:1rem; color:var(--text-muted);">/ mo</span></div>
+                <p style="color: var(--text-muted);">For Production Studios</p>
+                <ul class="pricing-features">
+                    <li><i class="fa-solid fa-circle-check"></i> Tailored Internal Model Nodes</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Team Asset Sync Repositories</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Dedicated SLA API Access Points</li>
+                </ul>
+                <button class="btn btn-secondary" style="width:100%;" onclick="navigateToPage('contact')">Contact Enterprise Desk</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="blog-page" class="app-page container">
+        <h1 class="section-title" style="margin-top: 3rem;">The AI Content Research Log</h1>
+        <p class="section-desc">Expert updates tracking structural multi-platform algorithm paradigms.</p>
+        
+        <div class="blog-grid" style="margin-top: 3rem;">
+            <div class="glass-card">
+                <div class="blog-date">May 24, 2026 // Content Strategy</div>
+                <h4>Decoding the 2026 Semantic Recommendation Models</h4>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">How multimodal content processing systems evaluate text structures to index niche user feeds dynamically.</p>
+            </div>
+            <div class="glass-card">
+                <div class="blog-date">April 12, 2026 // AI Engineering</div>
+                <h4>The Shift Toward Contextual Guidelines Training</h4>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">Why generalized prompts fail and customized structural logic fine-tuning generates continuous viral results.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="contact-page" class="app-page container">
+        <div class="auth-container glass-card text-center" style="max-width: 600px;">
+            <h2>Connect with System Specialists</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Need dedicated fine-tuning support workflows? Connect with our team.</p>
+            <form onsubmit="event.preventDefault(); showToast('Message successfully logged in pipeline!');">
+                <div class="form-group">
+                    <label>Workspace Full Name</label>
+                    <input type="text" class="form-input" required placeholder="Alex Mercer">
+                </div>
+                <div class="form-group">
+                    <label>Enterprise Routing Email Address</label>
+                    <input type="email" class="form-input" required placeholder="alex@workspace.com">
+                </div>
+                <div class="form-group">
+                    <label>System Inquiry Message</label>
+                    <textarea class="form-input" style="height: 120px; font-family: inherit; resize:none;" required placeholder="Outline your team infrastructure needs..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Dispatch Transmission</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="login-page" class="app-page container">
+        <div class="auth-container glass-card text-center">
+            <h2 style="margin-bottom: 0.5rem;">Welcome Back Operator</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Re-verify authentication variables.</p>
+            <form onsubmit="handleDemoAuthentication(event)">
+                <div class="form-group">
+                    <label>Operator Email Address</label>
+                    <input type="email" class="form-input" required value="creator@nova.ai">
+                </div>
+                <div class="form-group">
+                    <label>Secure Gateway Password</label>
+                    <input type="password" class="form-input" required value="••••••••••••">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Authenticate Session</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="signup-page" class="app-page container">
+        <div class="auth-container glass-card text-center">
+            <h2 style="margin-bottom: 0.5rem;">Initialize Content Node</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Gain immediate pipeline access parameters.</p>
+            <form onsubmit="handleDemoAuthentication(event)">
+                <div class="form-group">
+                    <label>Account Workspace ID</label>
+                    <input type="text" class="form-input" required placeholder="Creative Studios LLC">
+                </div>
+                <div class="form-group">
+                    <label>Operator Email Address</label>
+                    <input type="email" class="form-input" required placeholder="operator@studio.com">
+                </div>
+                <div class="form-group">
+                    <label>Create Platform Access Code</label>
+                    <input type="password" class="form-input" required placeholder="••••••••••••">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Register Production Unit</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="dashboard-page" class="app-page">
+        <div class="dashboard-container">
+            <aside class="dash-sidebar">
+                <ul class="dash-menu">
+                    <li class="dash-menu-item active" onclick="switchDashboardTab('workspace')"><i class="fa-solid fa-square-rss"></i> Production Space</li>
+                    <li class="dash-menu-item" onclick="switchDashboardTab('history')"><i class="fa-solid fa-timeline"></i> Archive History</li>
+                </ul>
+                <div style="margin-top:auto; padding-top: 1rem; border-top: 1px solid var(--border-color); font-size: 0.85rem;">
+                    <p style="color: var(--text-muted);">Active Node Profile:</p>
+                    <p style="font-weight:600; color:var(--text-primary);"><i class="fa-solid fa-circle" style="color:#22c55e; font-size:0.6rem;"></i> Creator Pro Node v1</p>
+                </div>
+            </aside>
+
+            <div class="dash-content-area">
+                <div id="dash-tab-workspace">
+                    <div class="dash-header-inline">
+                        <div>
+                            <h2>Interactive Workspace Console</h2>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">Configure structural parameters and execute production scripts.</p>
+                        </div>
+                    </div>
+
+                    <div class="stats-strip">
+                        <div class="glass-card stat-card">
+                            <span style="font-size:0.85rem; color:var(--text-muted); font-weight:600; text-transform:uppercase;">Monthly Volume Limit</span>
+                            <div class="stat-num" id="stat-vol">42,810 / 50k</div>
+                        </div>
+                        <div class="glass-card stat-card">
+                            <span style="font-size:0.85rem; color:var(--text-muted); font-weight:600; text-transform:uppercase;">Pipelines Deployed</span>
+                            <div class="stat-num">8 Active</div>
+                        </div>
+                        <div class="glass-card stat-card">
+                            <span style="font-size:0.85rem; color:var(--text-muted); font-weight:600; text-transform:uppercase;">Conversion Lift Forecast</span>
+                            <div class="stat-num" style="color: #10b981;">+34.2%</div>
+                        </div>
+                    </div>
+
+                    <div class="workspace-grid">
+                        <div class="glass-card prompt-panel">
+                            <h3>Execution Configuration Parameters</h3>
+                            <div class="form-group">
+                                <label style="font-weight:600;">Select Target Engine Tool Preset</label>
+                                <select class="select-tool" id="dashToolSelect">
+                                    <option value="Viral TikTok Hook">Viral TikTok Hook</option>
+                                    <option value="YouTube Title Pack">YouTube Title Pack</option>
+                                    <option value="SEO Metadata Bundle">SEO Metadata Bundle</option>
+                                    <option value="Script Narrative Blueprint">Script Narrative Blueprint</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label style="font-weight:600;">Core Idea Conceptual Blueprint Document</label>
+                                <textarea class="prompt-textarea" id="dashPromptInput" placeholder="Describe your topic, audience, and specific metrics requirements..."></textarea>
+                            </div>
+                            <button class="btn btn-primary" onclick="executeDashboardGeneration()" style="width: 100%;">
+                                <i class="fa-solid fa-bolt"></i> Execute Processing Matrix
+                            </button>
+                        </div>
+
+                        <div class="glass-card" style="display:flex; flex-direction:column; justify-content:between; position:relative;">
+                            <div style="display:flex; justify-content:between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:1rem; margin-bottom:1rem;">
+                                <h3>Generated Output Canvas</h3>
+                                <button class="copy-btn" style="position:static;" onclick="copyTextTrack('dashOutputTarget')" aria-label="Copy Output Content"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                            <div style="flex:1; min-height: 200px;">
+                                <div class="typing-loader" id="dashWorkspaceLoader">
+                                    <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+                                    <span>Compiling token structures...</span>
+                                </div>
+                                <p id="dashOutputTarget" style="color: var(--text-secondary); font-size: 0.95rem; white-space: pre-line;">Configure inputs on the left panel block and click generate to populate production assets.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="dash-tab-history" style="display: none;">
+                    <h2>Historical Assets Generation Log Ledger</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 2rem;">A deep historical record logging processed text nodes generated by your credential configurations.</p>
+                    <div class="glass-card" style="padding:0; overflow-x: auto;">
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp ID</th>
+                                    <th>Configuration Preset</th>
+                                    <th>Prompt Digest</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody">
+                                <tr>
+                                    <td style="font-family:monospace;">2026-05-28_A</td>
+                                    <td><span class="badge" style="margin:0; padding:0.2rem 0.6rem;">Viral Hook</span></td>
+                                    <td>3 SaaS strategies developers ignore...</td>
+                                    <td><button class="btn btn-secondary" style="padding:0.3rem 0.6rem;" onclick="showToast('Historical content loaded to canvas!')">Review</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="globalFooter">
+        <div class="container footer-grid">
+            <div class="footer-col">
+                <div class="logo" style="margin-bottom: 1.5rem;"><i class="fa-solid fa-wand-magic-sparkles"></i> NovaAI</div>
+                <p>Architecting the fundamental structural canvas that drives automated generation workflows globally across 2026 digital networks.</p>
+            </div>
+            <div class="footer-col">
+                <h4>System Architecture</h4>
+                <ul class="footer-links">
+                    <li><a onclick="navigateToPage('features')">Features Hub</a></li>
+                    <li><a onclick="navigateToPage('templates')">Workflow Templates</a></li>
+                    <li><a onclick="navigateToPage('pricing')">Subscription Models</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Company Hub</h4>
+                <ul class="footer-links">
+                    <li><a onclick="navigateToPage('blog')">Research Blog</a></li>
+                    <li><a onclick="navigateToPage('contact')">Connect Desk</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <p>&copy; 2026 NovaAI Systems Inc. Continuous deployment active.</p>
+            <p>Built with Pure Vanilla Web Standards</p>
+        </div>
+    </footer>
+
+    <script>
+        /* Mock database mapping mock prompt inputs to highly detailed 2026 viral outputs */
+        const MOCK_AI_DATABASE = {
+            "Viral TikTok Hook": "🚨 STOP scrolling if you still build projects without a database structure layout!\n\nHere is the exact structural trick that top 1% engineers implement every single time to scale up their platforms while optimizing rendering performance layout lines dynamically.\n\nThe secret? It's not edge configuration...",
+            "YouTube Title Pack": "1. I Built a 2026 SaaS Startup Platform in Exactly 45 Minutes (Step-by-Step)\n2. The Brutal Truth Behind Modern Content Generation Models Every Creator Ignores\n3. Why 99% of Software Projects Fail to Scale in 2026 Ecosystems",
+            "SEO Metadata Bundle": "Title: The Ultimate Blueprint to Master Multi-Page Web Platforms inside standard 2026 paradigms\nMeta Description: Explore deep production structural patterns to scale up layout execution speeds while keeping rendering weights light. Learn raw vanilla setup tactics today.",
+            "Script Narrative Blueprint": "[Visual Intro: Extreme macro shots of mechanical keyboard sequences clicking inside neon studio frames]\nNarration: \"Everyone wants to hit production on day one. But nobody tells you the structural architectural debt that sits waiting...\"\n[Audio Cue: High frequency bass swell drop processing data pulses]"
+        };
+
+        // Initialize App State Configuration Metrics
+        let appTheme = localStorage.getItem('nova-theme') || 'dark';
+        
+        // Setup initial system rules on load
+        document.addEventListener('DOMContentLoaded', () => {
+            setTheme(appTheme);
+            initializeScrollTrackEngine();
+            initializeGlowCursorTracker();
+            runHeroTypingSimulator();
+            setupAccordionLogic();
+            setupObserverReveals();
+        });
+
+        /* ==========================================================================
+           A. SPA SINGLE PAGE APPS ROUTING FRAMEWORK
+           ========================================================================== */
+        function navigateToPage(pageId) {
+            // Unset all old layouts
+            document.querySelectorAll('.app-page').forEach(page => page.classList.remove('active-page'));
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            
+            // Set target visible canvas
+            const targetPage = document.getElementById(`${pageId}-page`);
+            if (targetPage) {
+                targetPage.classList.add('active-page');
+            }
+            
+            // Highlight header element if matching menu structure
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                if(link.getAttribute('onclick') && link.getAttribute('onclick').includes(`'${pageId}'`)) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Adjust global footer display layer rules based on structural dashboard requirements
+            const footer = document.getElementById('globalFooter');
+            if (pageId === 'dashboard') {
+                footer.style.display = 'none';
+            } else {
+                footer.style.display = 'block';
+            }
+
+            // Collapse mobile menu if currently expanded open
+            document.getElementById('navMenu').classList.remove('active');
+            
+            window.scrollTo({ top: 0 });
+            showToast(`Routed to: /${pageId}`);
+        }
+
+        /* Hamburger Control Trigger Mechanism */
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        if(hamburgerBtn) {
+            hamburgerBtn.addEventListener('click', () => {
+                document.getElementById('navMenu').classList.toggle('active');
+            });
+        }
+
+        /* ==========================================================================
+           B. CONFIGURABLE THEMING ENGINE UTILITIES
+           ========================================================================== */
+        const themeToggleBtn = document.getElementById('themeToggle');
+        if(themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                let currentTheme = document.documentElement.getAttribute('data-theme');
+                let nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(nextTheme);
+            });
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('nova-theme', theme);
+            const icon = themeToggleBtn.querySelector('i');
+            if(theme === 'dark') {
+                icon.className = 'fa-solid fa-sun';
+            } else {
+                icon.className = 'fa-solid fa-moon';
+            }
+        }
+
+        /* ==========================================================================
+           C. SANDBOX & DASHBOARD INTERACTIVE EXECUTIONS
+           ========================================================================== */
+        function executeSandboxGeneration() {
+            const inputVal = document.getElementById('sandboxInput').value;
+            if(!inputVal.trim()) {
+                showToast("Error: Input prompt field is blank.");
+                return;
+            }
+            
+            const loader = document.getElementById('sandboxLoader');
+            const outputText = document.getElementById('sandboxOutputText');
+            const chosenTool = document.getElementById('sandboxToolSelect').value;
+
+            outputText.style.display = 'none';
+            loader.style.display = 'flex';
+
+            setTimeout(() => {
+                loader.style.display = 'none';
+                outputText.style.display = 'block';
+                outputText.innerText = MOCK_AI_DATABASE[chosenTool] || MOCK_AI_DATABASE["Viral TikTok Hook"];
+                showToast("Sandbox data compilation sequence completed.");
+            }, 1200);
+        }
+
+        function executeDashboardGeneration() {
+            const promptVal = document.getElementById('dashPromptInput').value;
+            if(!promptVal.trim()) {
+                showToast("Pipeline abort: Prompt empty.");
+                return;
+            }
+
+            const loader = document.getElementById('dashWorkspaceLoader');
+            const targetText = document.getElementById('dashOutputTarget');
+            const selectedTool = document.getElementById('dashToolSelect').value;
+
+            targetText.style.display = 'none';
+            loader.style.display = 'flex';
+
+            setTimeout(() => {
+                loader.style.display = 'none';
+                targetText.style.display = 'block';
+                
+                const outputResult = MOCK_AI_DATABASE[selectedTool] || MOCK_AI_DATABASE["Viral TikTok Hook"];
+                targetText.innerText = outputResult;
+
+                // Dynamically update stats values
+                const statVol = document.getElementById('stat-vol');
+                if(statVol) statVol.innerText = "43,120 / 50k";
+
+                // Push tracking item into structured log ledger arrays
+                const tableBody = document.getElementById('historyTableBody');
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="font-family:monospace;">2026-05-29_New</td>
+                    <td><span class="badge" style="margin:0; padding:0.2rem 0.6rem;">${selectedTool}</span></td>
+                    <td>${promptVal.substring(0, 25)}...</td>
+                    <td><button class="btn btn-secondary" style="padding:0.3rem 0.6rem;" onclick="showToast('Content pulled from archival indexes!')">Review</button></td>
+                `;
+                tableBody.prepend(row);
+
+                showToast("Dashboard transaction token processed.");
+            }, 1500);
+        }
+
+        function loadTemplateToDashboard(toolPreset, conceptSample) {
+            navigateToPage('dashboard');
+            document.getElementById('dashToolSelect').value = toolPreset;
+            document.getElementById('dashPromptInput').value = `Operational workflow baseline model mapping concept metrics matching: ${conceptSample}`;
+            showToast(`Loaded Template: ${toolPreset}`);
+        }
+
+        function switchDashboardTab(tabId) {
+            document.getElementById('dash-tab-workspace').style.display = tabId === 'workspace' ? 'block' : 'none';
+            document.getElementById('dash-tab-history').style.display = tabId === 'history' ? 'block' : 'none';
+            
+            document.querySelectorAll('.dash-menu-item').forEach(item => item.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        function handleDemoAuthentication(event) {
+            event.preventDefault();
+            showToast("Credentials certified successfully.");
+            navigateToPage('dashboard');
+        }
+
+        /* ==========================================================================
+           D. SYSTEM NOTIFICATION & COPY PIPELINES
+           ========================================================================== */
+        function showToast(message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fa-solid fa-circle-info" style="color:var(--accent);"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function copyTextTrack(elementId) {
+            const textToCopy = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showToast("Asset clipboard sync operation successful.");
+            }).catch(() => {
+                showToast("Clipboard connection handshake rejected.");
+            });
+        }
+
+        /* ==========================================================================
+           E. UX UTILITIES & ANIMATION SYSTEM ENGINES
+           ========================================================================== */
+        function runHeroTypingSimulator() {
+            const target = document.getElementById('hero-typing-target');
+            if(!target) return;
+            const fullStr = "Executing predictive distribution models... Analyzed structural pacing maps across 45,000 top viral retention feeds. Hook optimization complete. Ready for instant multi-channel production scheduling nodes.";
+            let idx = 0;
+            
+            function frame() {
+                if(idx < fullStr.length) {
+                    target.innerHTML += fullStr.charAt(idx);
+                    idx++;
+                    setTimeout(frame, 30);
+                }
+            }
+            frame();
+        }
+
+        function initializeScrollTrackEngine() {
+            const scrollBar = document.getElementById('scrollBar');
+            const backToTop = document.getElementById('backToTopBtn');
+            
+            window.addEventListener('scroll', () => {
+                const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+                if (totalHeight > 0) {
+                    const progress = (window.pageYOffset / totalHeight) * 100;
+                    scrollBar.style.width = `${progress}%`;
+                }
+
+                if (window.pageYOffset > 400) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+            });
+
+            backToTop.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        function initializeGlowCursorTracker() {
+            const cursor = document.getElementById('glowCursor');
+            window.addEventListener('mousemove', (e) => {
+                cursor.style.left = `${e.clientX}px`;
+                cursor.style.top = `${e.clientY}px`;
+            });
+        }
+
+        function setupAccordionLogic() {
+            document.querySelectorAll('.faq-trigger').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const parent = btn.parentElement;
+                    parent.classList.toggle('open');
+                });
+            });
+        }
+
+        function setupObserverReveals() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        function toggleMiniChat() {
+            showToast("Floating AI helper node processing channel availability parameters...");
+        }
+    </script>
+</body>
+</html>
